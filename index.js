@@ -53,18 +53,23 @@ app.listen(process.env.PORT || 2222, () => {
 })
 
 app.get('/', (req, res) => {
-    const sql = "select * from users"
+    const sql = "select * from cadastros"
     conexao.query(sql, (erro, ln, cl) => {
+        let qtd = ln.reduce((t, v) => t + v.qtd, 0)
+        let total = ln.reduce((t, v) => t + v.total, 0)
         res.json({
+            qtd: qtd,
+            total: total,
             data: ln
         })
     })
 })
 
 app.post('/', (req, res) => {
-    var id = req.params.id
-    const sql = "INSERT INTO entregaMotoboy (id_ok) VALUES (?);"
-    conexao.query(sql, [id], (erro, result, fields) => {
+    var qtd = req.body.qtd
+    var total = req.body.total
+    const sql = "INSERT INTO cadastros (qtd, total) VALUES (?, ?);"
+    conexao.query(sql, [qtd, total], (erro, result, fields) => {
     })
     res.end()
 })
